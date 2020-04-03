@@ -1,5 +1,6 @@
 package com.eonsahead.swing;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.GeneralPath;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -18,6 +19,9 @@ public class SwingPanel extends JPanel implements ActionListener {
     private double centerY = 0.0;
     private double radius = 0.5;
     private double deltaY = 0.02;
+    private double deltaAngle = 2 * Math.PI / 180;
+    private double phase = 0.0;
+
     private Color color = Color.red;
 
     public SwingPanel() {
@@ -66,6 +70,9 @@ public class SwingPanel extends JPanel implements ActionListener {
         int h = this.getHeight();
 
         AffineTransform transform = new AffineTransform();
+        AffineTransform rotation = new AffineTransform();
+        rotation.setToRotation(deltaAngle);
+
         AffineTransform scaling = new AffineTransform();
         scaling.setToScale(w / 2, h / 2);
         AffineTransform translation = new AffineTransform();
@@ -73,18 +80,43 @@ public class SwingPanel extends JPanel implements ActionListener {
 
         transform.concatenate(scaling);
         transform.concatenate(translation);
+        transform.concatenate(rotation);
 
         // Replace this block of code that creates
         // an ellipse with your own code that draws
         // something else
         // Make sure that all geometry fits in a square
         // whose corners are (-1, -1) and (+1, +1)
-        double d = 2 * this.radius;
-        double ulx = this.centerX - this.radius;
-        double uly = this.centerY - this.radius;
-        Ellipse2D.Double circle = new Ellipse2D.Double(ulx, uly, d, d);
+//        double d = 2 * this.radius;
+//        double ulx = this.centerX - this.radius;
+//        double uly = this.centerY - this.radius;
+//        Ellipse2D.Double circle = new Ellipse2D.Double(ulx, uly, d, d);
+//        Shape shape = transform.createTransformedShape(circle);
+        double points = 12;
+        GeneralPath star = new GeneralPath();
+        double minorRadius = 0.4;
+        double majorRadius = 0.6;
+        double x = this.centerX + majorRadius * Math.cos(this.phase);
+        double y = this.centerY + majorRadius * Math.sin(this.phase);
+        star.moveTo(x, y);
+        for (int i = 1; i < 2 * points; i++) {
+            double angle = 2.0 * Math.PI * ((double) i) / (2 * points);
+            angle += phase;
 
-        Shape shape = transform.createTransformedShape(circle);
+            if (i % 2 == 0) {
+                x = this.centerX + majorRadius * Math.cos(angle);
+                y = this.centerY + majorRadius * Math.sin(angle);
+            } // if
+            else {
+                x = this.centerX + minorRadius * Math.cos(angle);
+                y = this.centerY + minorRadius * Math.sin(angle);
+            } // else
+            star.lineTo(x, y);
+        } // for
+        star.closePath();
+
+        Shape shape = transform.createTransformedShape(star);
+
         g2D.setColor(this.getColor());
         g2D.fill(shape);
     } // paintComponent( Graphics )
@@ -105,6 +137,8 @@ public class SwingPanel extends JPanel implements ActionListener {
             this.deltaY = -this.deltaY;
         } // else if
         this.centerY += this.deltaY;
+
+        this.phase += this.deltaAngle;
 
         this.repaint();
     } // actionPerformed( ActionEvent )
