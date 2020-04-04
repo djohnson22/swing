@@ -1,6 +1,5 @@
 package com.eonsahead.swing;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,50 +7,37 @@ import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class SwingPanel extends JPanel implements ActionListener {
 
+    private final int points = 8;
     private double centerX = 0.0;
     private double centerY = 0.0;
-    private double radius = 0.5;
-    private double deltaY = 0.02;
+    private final double minorRadius = 0.2;
+    private final double majorRadius = 0.3;
+
+    private double deltaX = Math.random()/20;
+    private double deltaY = Math.random()/20;
     private double deltaAngle = 2 * Math.PI / 180;
     private double phase = 0.0;
+    private Shape shape;
 
     private Color color = Color.red;
 
     public SwingPanel() {
-        Timer timer = new Timer(50, this);
+        Timer timer = new Timer(20, this);
         timer.start();
+
+        int p = this.points;
+        double x = this.centerX;
+        double y = this.centerY;
+        double r0 = this.minorRadius;
+        double r1 = this.majorRadius;
+        this.shape = makeStar(p, x, y, r0, r1);
     } // SwingPanel()
-
-    public double getCenterX() {
-        return this.centerX;
-    } // getCenterX()
-
-    public void setCenterX(double x) {
-        this.centerX = x;
-    } // setCenterX( double )
-
-    public double getCenterY() {
-        return this.centerY;
-    } // getCenterY()
-
-    public void setCenterY(double y) {
-        this.centerY = y;
-    } // setCenterY( double )
-
-    public double getRadius() {
-        return this.radius;
-    } // getRadius()
-
-    public void setRadius(double r) {
-        this.radius = r;
-    } // setRadius( double )
 
     public Color getColor() {
         return this.color;
@@ -70,13 +56,17 @@ public class SwingPanel extends JPanel implements ActionListener {
         int h = this.getHeight();
 
         AffineTransform transform = new AffineTransform();
+
         AffineTransform rotation = new AffineTransform();
-        rotation.setToRotation(deltaAngle);
+        rotation.setToRotation(this.phase);
 
         AffineTransform scaling = new AffineTransform();
         scaling.setToScale(w / 2, h / 2);
+
         AffineTransform translation = new AffineTransform();
-        translation.setToTranslation(1.0, 1.0);
+        double cx = 1.0 + this.centerX;
+        double cy = 1.0 + this.centerY;
+        translation.setToTranslation( cx, cy );
 
         transform.concatenate(scaling);
         transform.concatenate(translation);
@@ -92,34 +82,39 @@ public class SwingPanel extends JPanel implements ActionListener {
 //        double uly = this.centerY - this.radius;
 //        Ellipse2D.Double circle = new Ellipse2D.Double(ulx, uly, d, d);
 //        Shape shape = transform.createTransformedShape(circle);
-        double points = 12;
+        Shape s = transform.createTransformedShape(this.shape);
+
+        g2D.setColor(this.getColor());
+        g2D.fill(s);
+    } // paintComponent( Graphics )
+
+    private Shape makeStar(int points,
+            double centerX, double centerY,
+            double minorRadius, double majorRadius) {
+
         GeneralPath star = new GeneralPath();
-        double minorRadius = 0.4;
-        double majorRadius = 0.6;
-        double x = this.centerX + majorRadius * Math.cos(this.phase);
-        double y = this.centerY + majorRadius * Math.sin(this.phase);
+
+        double x = centerX + majorRadius * Math.cos(0.0);
+        double y = centerY + majorRadius * Math.sin(0.0);
         star.moveTo(x, y);
         for (int i = 1; i < 2 * points; i++) {
-            double angle = 2.0 * Math.PI * ((double) i) / (2 * points);
-            angle += phase;
+            double fraction = ((double) i) / (2 * points);
+            double angle = 2.0 * Math.PI * fraction;
 
             if (i % 2 == 0) {
-                x = this.centerX + majorRadius * Math.cos(angle);
-                y = this.centerY + majorRadius * Math.sin(angle);
+                x = centerX + majorRadius * Math.cos(angle);
+                y = centerY + majorRadius * Math.sin(angle);
             } // if
             else {
-                x = this.centerX + minorRadius * Math.cos(angle);
-                y = this.centerY + minorRadius * Math.sin(angle);
+                x = centerX + minorRadius * Math.cos(angle);
+                y = centerY + minorRadius * Math.sin(angle);
             } // else
             star.lineTo(x, y);
         } // for
         star.closePath();
 
-        Shape shape = transform.createTransformedShape(star);
-
-        g2D.setColor(this.getColor());
-        g2D.fill(shape);
-    } // paintComponent( Graphics )
+        return star;
+    } // makeStar()
 
     @Override
     public void actionPerformed(ActionEvent event) {
@@ -130,15 +125,22 @@ public class SwingPanel extends JPanel implements ActionListener {
         // Rotate? (There's an AffineTransform for that, too.)
         // Change color?
 
-        if (this.centerY > 0.5) {
+        if ((this.centerX < -0.5) || (this.centerX > 0.5 )) {
+            this.deltaX = -this.deltaX;
+        } // if
+        
+        if ((this.centerY < -0.5) || (this.centerY > 0.5)) {
             this.deltaY = -this.deltaY;
         } // if
-        else if (this.centerY < -0.5) {
-            this.deltaY = -this.deltaY;
-        } // else if
+        
+        this.centerX += this.deltaX;
         this.centerY += this.deltaY;
 
         this.phase += this.deltaAngle;
+        
+        if( this.phase > 2 * Math.PI ) {
+            this.phase = this.phase - 2 * Math.PI;
+        } // if
 
         this.repaint();
     } // actionPerformed( ActionEvent )
