@@ -34,7 +34,6 @@ public class Swing extends JFrame {
 
         Random rng = new Random();
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
-            double fraction = ((double) i) / (NUMBER_OF_COLORS - 1);
             int red = 64 + rng.nextInt(128);
             int green = 64 + rng.nextInt(128);
             int blue = 64 + rng.nextInt(128);
