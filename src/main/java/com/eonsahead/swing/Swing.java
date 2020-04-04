@@ -79,7 +79,7 @@ public class Swing extends JFrame {
         this.setVisible(true);
     } // Swing()
 
-    public Color makeColor(int lo, int hi) {
+    public final Color makeColor(int lo, int hi) {
         int red = lo + this.rng.nextInt(hi);
         int green = lo + this.rng.nextInt(hi);
         int blue = lo + this.rng.nextInt(hi);
