@@ -22,6 +22,7 @@ public class Swing extends JFrame {
     private final List<Color> bgPalette = new ArrayList<>();
     private final List<Color> fgPalette = new ArrayList<>();
     private final SwingPanel panel;
+    private final Random rng = new Random();
 
     public Swing() {
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -32,21 +33,14 @@ public class Swing extends JFrame {
         this.panel = new SwingPanel();
         pane.add(panel);
 
-        Random rng = new Random();
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
-            int red = 64 + rng.nextInt(128);
-            int green = 64 + rng.nextInt(128);
-            int blue = 64 + rng.nextInt(128);
-            Color color = new Color(red, green, blue);
+            Color color = makeColor(64, 128);
             bgPalette.add(color);
         } // for
         this.panel.setBackground(bgPalette.get(0));
 
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
-            int red = 32 + rng.nextInt(224);
-            int green = 32 + rng.nextInt(224);
-            int blue = 32 + rng.nextInt(224);
-            Color color = new Color(red, green, blue);
+            Color color = makeColor( 32, 224 );
             fgPalette.add(color);
         } // for
         this.panel.setColor(fgPalette.get(0));
@@ -73,7 +67,7 @@ public class Swing extends JFrame {
 
         MenuListener fgListener = new MenuListener(MenuListener.FG_MODE,
                 this.FG_COLOR, this.fgPalette, this.panel);
-        
+
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
             String label = FG_COLOR + " " + i;
             JMenuItem item = new JMenuItem(label);
@@ -84,6 +78,14 @@ public class Swing extends JFrame {
 
         this.setVisible(true);
     } // Swing()
+
+    public Color makeColor(int lo, int hi) {
+        int red = lo + this.rng.nextInt(hi);
+        int green = lo + this.rng.nextInt(hi);
+        int blue = lo + this.rng.nextInt(hi);
+        Color color = new Color(red, green, blue);
+        return color;
+    } // makeColor( int, int )
 
     public static void main(String[] args) {
         Swing swing = new Swing();
