@@ -1,5 +1,8 @@
 package com.eonsahead.swing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Vector {
 
     private double[] elements = new double[4];
@@ -53,6 +56,14 @@ public class Vector {
         return Math.sqrt( this.dot( this ) );
     } // magnitude()
     
+    public Vector normalize() {
+        double length = this.magnitude();
+        double x = this.get(0) / length;
+        double y = this.get(1) / length;
+        double z = this.get(2) / length;
+        return new Vector( x, y, z );
+    } // normalize()
+    
     public Vector cross( Vector v ) {
         double x = this.get(1) * v.get(2) - this.get(2) * v.get(1);
         double y = this.get(2) * v.get(0) - this.get(0) * v.get(2);
@@ -60,4 +71,21 @@ public class Vector {
         return new Vector( x, y, z );
     } // cross( Vector )
     
+    public static void main( String [] args ) {
+        System.out.println( "hi");
+        List<List<Vector>> surface = new ArrayList<>();
+        
+        List<Vector> poly0 = new ArrayList<>();
+        poly0.add(new Vector());
+        poly0.add(new Vector());
+        
+        List<Vector> poly1 = new ArrayList<>();
+        poly1.add(new Vector());
+        poly1.add(new Vector());
+        
+        surface.add( poly0 );
+        surface.add( poly1 );
+        
+        System.out.println( "size = " + surface.size() );
+    } // main( String [] )
 } // Vector
