@@ -40,7 +40,7 @@ public class Swing extends JFrame {
         this.panel.setBackground(bgPalette.get(0));
 
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
-            Color color = makeColor( 32, 224 );
+            Color color = makeColor(32, 224);
             fgPalette.add(color);
         } // for
         this.panel.setColor(fgPalette.get(0));
@@ -55,11 +55,7 @@ public class Swing extends JFrame {
                 this.BG_COLOR, this.bgPalette, this.panel);
 
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
-            String label = BG_COLOR + " " + i;
-            JMenuItem item = new JMenuItem(label);
-            item.addActionListener(bgListener);
-            item.setActionCommand(label);
-            bgColorMenu.add(item);
+            makeMenuItem( BG_COLOR, i, bgListener, bgColorMenu );
         } // for
 
         JMenu fgColorMenu = new JMenu(FG_COLOR);
@@ -69,11 +65,7 @@ public class Swing extends JFrame {
                 this.FG_COLOR, this.fgPalette, this.panel);
 
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
-            String label = FG_COLOR + " " + i;
-            JMenuItem item = new JMenuItem(label);
-            item.addActionListener(fgListener);
-            item.setActionCommand(label);
-            fgColorMenu.add(item);
+            makeMenuItem( FG_COLOR, i, fgListener, fgColorMenu );
         } // for
 
         this.setVisible(true);
@@ -86,6 +78,15 @@ public class Swing extends JFrame {
         Color color = new Color(red, green, blue);
         return color;
     } // makeColor( int, int )
+
+    public final void makeMenuItem( String prefix, int index,
+            MenuListener listener, JMenu menu ) {
+        String label = prefix + " " + index;
+        JMenuItem item = new JMenuItem(label);
+        item.addActionListener(listener);
+        item.setActionCommand(label);
+        menu.add(item);
+    } // makeMenuItem()
 
     public static void main(String[] args) {
         Swing swing = new Swing();
