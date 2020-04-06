@@ -12,7 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class SwingPanel extends JPanel implements ActionListener {
-
+// a SwingPanel is a kind of JPanel
+// and
+// a SwingPanel is a kind of ActionListener
+    
     private final int points = 8;
     private double centerX = 0.0;
     private double centerY = 0.0;
@@ -125,7 +128,7 @@ public class SwingPanel extends JPanel implements ActionListener {
         // Rotate? (There's an AffineTransform for that, too.)
         // Change color?
 
-        if ((this.centerX < -0.5) || (this.centerX > 0.5 )) {
+        if ((this.centerX < -1.0) || (this.centerX > 1.0 )) {
             this.deltaX = -this.deltaX;
         } // if
         

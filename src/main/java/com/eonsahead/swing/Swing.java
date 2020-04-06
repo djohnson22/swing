@@ -11,7 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 public class Swing extends JFrame {
-
+    
     private final int FRAME_WIDTH = 512;
     private final int FRAME_HEIGHT = 512;
     private final String FRAME_TITLE = "Swing";
