@@ -15,31 +15,44 @@ public class SwingPanel extends JPanel implements ActionListener {
 // a SwingPanel is a kind of JPanel
 // and
 // a SwingPanel is a kind of ActionListener
-    
+
     private final int points = 8;
     private double centerX = 0.0;
     private double centerY = 0.0;
     private final double minorRadius = 0.2;
     private final double majorRadius = 0.3;
 
-    private double deltaX = Math.random()/20;
-    private double deltaY = Math.random()/20;
+    private double deltaX = Math.random() / 20;
+    private double deltaY = Math.random() / 20;
     private double deltaAngle = 2 * Math.PI / 180;
     private double phase = 0.0;
     private Shape shape;
 
     private Color color = Color.red;
+    private Polygon3D poly;
+    private Matrix spinner;
 
     public SwingPanel() {
         Timer timer = new Timer(20, this);
         timer.start();
 
-        int p = this.points;
-        double x = this.centerX;
-        double y = this.centerY;
-        double r0 = this.minorRadius;
-        double r1 = this.majorRadius;
-        this.shape = makeStar(p, x, y, r0, r1);
+//        int p = this.points;
+//        double x = this.centerX;
+//        double y = this.centerY;
+//        double r0 = this.minorRadius;
+//        double r1 = this.majorRadius;
+//        this.shape = makeStar(p, x, y, r0, r1);
+        this.poly = new Polygon3D(5, 0.6);
+        Matrix a = new Matrix();
+        a.rotationX(Math.PI / 112);
+
+        Matrix b = new Matrix();
+        b.rotationY(Math.PI / 144);
+
+        Matrix c = new Matrix();
+        c.rotationZ(Math.PI / 80);
+
+        this.spinner = a.multiply(b).multiply(c);
     } // SwingPanel()
 
     public Color getColor() {
@@ -69,7 +82,7 @@ public class SwingPanel extends JPanel implements ActionListener {
         AffineTransform translation = new AffineTransform();
         double cx = 1.0 + this.centerX;
         double cy = 1.0 + this.centerY;
-        translation.setToTranslation( cx, cy );
+        translation.setToTranslation(cx, cy);
 
         transform.concatenate(scaling);
         transform.concatenate(translation);
@@ -85,6 +98,8 @@ public class SwingPanel extends JPanel implements ActionListener {
 //        double uly = this.centerY - this.radius;
 //        Ellipse2D.Double circle = new Ellipse2D.Double(ulx, uly, d, d);
 //        Shape shape = transform.createTransformedShape(circle);
+        this.shape = poly.getShape();
+
         Shape s = transform.createTransformedShape(this.shape);
 
         g2D.setColor(this.getColor());
@@ -128,23 +143,24 @@ public class SwingPanel extends JPanel implements ActionListener {
         // Rotate? (There's an AffineTransform for that, too.)
         // Change color?
 
-        if ((this.centerX < -1.0) || (this.centerX > 1.0 )) {
-            this.deltaX = -this.deltaX;
-        } // if
+//        if ((this.centerX < -0.5) || (this.centerX > 0.5)) {
+//            this.deltaX = -this.deltaX;
+//        } // if
+//
+//        if ((this.centerY < -0.5) || (this.centerY > 0.5)) {
+//            this.deltaY = -this.deltaY;
+//        } // if
+//
+//        this.centerX += this.deltaX;
+//        this.centerY += this.deltaY;
+//
+//        this.phase += this.deltaAngle;
+//
+//        if (this.phase > 2 * Math.PI) {
+//            this.phase = this.phase - 2 * Math.PI;
+//        } // if
         
-        if ((this.centerY < -0.5) || (this.centerY > 0.5)) {
-            this.deltaY = -this.deltaY;
-        } // if
-        
-        this.centerX += this.deltaX;
-        this.centerY += this.deltaY;
-
-        this.phase += this.deltaAngle;
-        
-        if( this.phase > 2 * Math.PI ) {
-            this.phase = this.phase - 2 * Math.PI;
-        } // if
-
+        this.poly.transform(spinner);
         this.repaint();
     } // actionPerformed( ActionEvent )
 

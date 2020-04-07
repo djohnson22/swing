@@ -31,6 +31,17 @@ public class Vector {
         return this.elements[index];
     } // get( int )
     
+    public void set( int index, double value ) {
+        this.elements[index] = value;
+    } // set( int, double )
+    
+    public void set( Vector v ) {
+        this.elements[0] = v.elements[0];
+        this.elements[1] = v.elements[1];
+        this.elements[2] = v.elements[2];
+        this.elements[3] = v.elements[3];
+    } // set( Vector )
+    
     public Vector add( Vector v ) {
         double x = this.get(0) + v.get(0);
         double y = this.get(1) + v.get(1);
