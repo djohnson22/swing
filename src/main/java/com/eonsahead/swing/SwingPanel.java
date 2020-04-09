@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -16,24 +17,26 @@ public class SwingPanel extends JPanel implements ActionListener {
 // and
 // a SwingPanel is a kind of ActionListener
 
-    private final int points = 8;
-    private double centerX = 0.0;
-    private double centerY = 0.0;
-    private final double minorRadius = 0.2;
-    private final double majorRadius = 0.3;
-
-    private double deltaX = Math.random() / 20;
-    private double deltaY = Math.random() / 20;
-    private double deltaAngle = 2 * Math.PI / 180;
-    private double phase = 0.0;
+//    private final int points = 8;
+//    private double centerX = 0.0;
+//    private double centerY = 0.0;
+//    private final double minorRadius = 0.2;
+//    private final double majorRadius = 0.3;
+    private final double deltaX = Math.random() / 20;
+    private final double deltaY = Math.random() / 20;
+    private final double deltaAngle = 2 * Math.PI / 180;
+//    private double phase = 0.0;
     private Shape shape;
 
     private Color color = Color.red;
-    private Polygon3D poly;
-    private Matrix spinner;
+//    private final Polygon3D poly;
+    private final Prism prism;
+    private final Matrix spinner;
+
+    private final Vector illumination;
 
     public SwingPanel() {
-        Timer timer = new Timer(20, this);
+        Timer timer = new Timer(50, this);
         timer.start();
 
 //        int p = this.points;
@@ -42,17 +45,20 @@ public class SwingPanel extends JPanel implements ActionListener {
 //        double r0 = this.minorRadius;
 //        double r1 = this.majorRadius;
 //        this.shape = makeStar(p, x, y, r0, r1);
-        this.poly = new Polygon3D(5, 0.6);
+//        this.poly = new Polygon3D(7, 0.5, 0.0);
+        this.prism = new Prism(8, 0.8, 0.8);
         Matrix a = new Matrix();
-        a.rotationX(Math.PI / 112);
+        a.rotationX(Math.PI / 400);
 
         Matrix b = new Matrix();
-        b.rotationY(Math.PI / 144);
+        b.rotationY(Math.PI / 400);
 
         Matrix c = new Matrix();
-        c.rotationZ(Math.PI / 80);
+        c.rotationZ(Math.PI / 400);
 
         this.spinner = a.multiply(b).multiply(c);
+
+        this.illumination = (new Vector(1.0, 2.0, 3.0)).normalize();
     } // SwingPanel()
 
     public Color getColor() {
@@ -73,20 +79,21 @@ public class SwingPanel extends JPanel implements ActionListener {
 
         AffineTransform transform = new AffineTransform();
 
-        AffineTransform rotation = new AffineTransform();
-        rotation.setToRotation(this.phase);
-
+//        AffineTransform rotation = new AffineTransform();
+//        rotation.setToRotation(this.phase);
         AffineTransform scaling = new AffineTransform();
         scaling.setToScale(w / 2, h / 2);
 
         AffineTransform translation = new AffineTransform();
-        double cx = 1.0 + this.centerX;
-        double cy = 1.0 + this.centerY;
+//        double cx = 1.0 + this.centerX;
+//        double cy = 1.0 + this.centerY;
+        double cx = 1.0;
+        double cy = 1.0;
         translation.setToTranslation(cx, cy);
 
         transform.concatenate(scaling);
         transform.concatenate(translation);
-        transform.concatenate(rotation);
+//        transform.concatenate(rotation);
 
         // Replace this block of code that creates
         // an ellipse with your own code that draws
@@ -98,12 +105,43 @@ public class SwingPanel extends JPanel implements ActionListener {
 //        double uly = this.centerY - this.radius;
 //        Ellipse2D.Double circle = new Ellipse2D.Double(ulx, uly, d, d);
 //        Shape shape = transform.createTransformedShape(circle);
-        this.shape = poly.getShape();
+//        this.shape = poly.getShape();
+//
+//        Shape s = transform.createTransformedShape(this.shape);
+//
+//        g2D.setColor(this.getColor());
+//        g2D.fill(s);
+        List<Polygon3D> faces = this.prism.getFaces();
+        for (Polygon3D p : faces) {
+            Shape s = transform.createTransformedShape(p.getShape());
 
-        Shape s = transform.createTransformedShape(this.shape);
+            Vector normal = p.getNormal();
+            if (normal.get(2) > 0) {
+                double brightness = normal.dot(illumination);
 
-        g2D.setColor(this.getColor());
-        g2D.fill(s);
+                Color c = this.getColor();
+
+                double ambient = 0.2;
+                int red;
+                int green;
+                int blue;
+                if (brightness > 0) {
+                    red = (int) (brightness * c.getRed());
+                    green = (int) (brightness * c.getGreen());
+                    blue = (int) (brightness * c.getBlue());
+                } // if
+                else {
+                    red = (int) (ambient * c.getRed());
+                    green = (int) (ambient * c.getGreen());
+                    blue = (int) (ambient * c.getBlue());
+                } // else
+                Color shade = new Color(red, green, blue);
+                
+                g2D.setColor(shade);
+                g2D.fill(s);
+            } // if
+        } // for
+
     } // paintComponent( Graphics )
 
     private Shape makeStar(int points,
@@ -159,8 +197,8 @@ public class SwingPanel extends JPanel implements ActionListener {
 //        if (this.phase > 2 * Math.PI) {
 //            this.phase = this.phase - 2 * Math.PI;
 //        } // if
-        
-        this.poly.transform(spinner);
+//        this.poly.transform(spinner);
+        this.prism.transform(spinner);
         this.repaint();
     } // actionPerformed( ActionEvent )
 
