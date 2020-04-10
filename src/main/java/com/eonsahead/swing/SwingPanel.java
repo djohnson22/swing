@@ -46,7 +46,7 @@ public class SwingPanel extends JPanel implements ActionListener {
 //        double r1 = this.majorRadius;
 //        this.shape = makeStar(p, x, y, r0, r1);
 //        this.poly = new Polygon3D(7, 0.5, 0.0);
-        this.prism = new Prism(8, 0.8, 0.8);
+        this.prism = new Prism(9, 0.8, 0.6);
         Matrix a = new Matrix();
         a.rotationX(Math.PI / 400);
 
@@ -121,7 +121,7 @@ public class SwingPanel extends JPanel implements ActionListener {
 
                 Color c = this.getColor();
 
-                double ambient = 0.2;
+                double ambient = 0.4;
                 int red;
                 int green;
                 int blue;
