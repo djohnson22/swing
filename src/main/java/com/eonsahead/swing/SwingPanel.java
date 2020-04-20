@@ -36,7 +36,7 @@ public class SwingPanel extends JPanel implements ActionListener {
     private final Vector illumination;
 
     public SwingPanel() {
-        Timer timer = new Timer(50, this);
+        Timer timer = new Timer(10, this);
         timer.start();
 
 //        int p = this.points;
@@ -46,15 +46,15 @@ public class SwingPanel extends JPanel implements ActionListener {
 //        double r1 = this.majorRadius;
 //        this.shape = makeStar(p, x, y, r0, r1);
 //        this.poly = new Polygon3D(7, 0.5, 0.0);
-        this.prism = new Prism(9, 0.8, 0.6);
+        this.prism = new Prism(3, .8, .6);
         Matrix a = new Matrix();
-        a.rotationX(Math.PI / 400);
+        a.rotationX(Math.PI / 100);
 
         Matrix b = new Matrix();
-        b.rotationY(Math.PI / 400);
+        b.rotationY(Math.PI / 100);
 
         Matrix c = new Matrix();
-        c.rotationZ(Math.PI / 400);
+        c.rotationZ(Math.PI / 100);
 
         this.spinner = a.multiply(b).multiply(c);
 

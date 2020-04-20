@@ -9,21 +9,26 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
+/**
+ * 
+ * 
+ */
 public class Swing extends JFrame {
     
-    private final int FRAME_WIDTH = 512;
-    private final int FRAME_HEIGHT = 512;
-    private final String FRAME_TITLE = "Swing";
-    private final int NUMBER_OF_COLORS = 8;
-    private final String BG_COLOR = "Background Color";
-    private final String FG_COLOR = "Foreground Color";
+    private final int FRAME_WIDTH = 1024;
+    private final int FRAME_HEIGHT = 1024;
+    private final String FRAME_TITLE = "Shape Rotation";
+    private final int NUMBER_OF_COLORS = 10;
+    private final String BG_COLOR = "BG Colors";
+    private final String FG_COLOR = "FG Colors";
 
     private final List<Color> bgPalette = new ArrayList<>();
     private final List<Color> fgPalette = new ArrayList<>();
     private final SwingPanel panel;
     private final Random rng = new Random();
-
+/**
+ * The swing constructor.
+ */
     public Swing() {
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setTitle(FRAME_TITLE);
@@ -40,7 +45,7 @@ public class Swing extends JFrame {
         this.panel.setBackground(bgPalette.get(0));
 
         for (int i = 0; i < NUMBER_OF_COLORS; i++) {
-            Color color = makeColor(32, 224);
+            Color color = makeColor(32, 100);
             fgPalette.add(color);
         } // for
         this.panel.setColor(fgPalette.get(0));
@@ -70,15 +75,23 @@ public class Swing extends JFrame {
 
         this.setVisible(true);
     } // Swing()
-
+/**
+ * Generate colors for both foreground and background.
+ * 
+ * @param lo the minimum value of a given color
+ * @param hi the maximum value of a given color
+ * @return a set of 3 values representing an RGB color
+ */
     public final Color makeColor(int lo, int hi) {
         int red = lo + this.rng.nextInt(hi);
         int green = lo + this.rng.nextInt(hi);
-        int blue = lo + this.rng.nextInt(hi);
+        int blue = 100 + this.rng.nextInt(hi);
         Color color = new Color(red, green, blue);
         return color;
     } // makeColor( int, int )
-
+/**
+ * 
+ */
     public final void makeMenuItem( String prefix, int index,
             MenuListener listener, JMenu menu ) {
         String label = prefix + " " + index;

@@ -2,11 +2,16 @@ package com.eonsahead.swing;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Model Vectors.
+ * 
+ */
 public class Vector {
 
     private double[] elements = new double[4];
-
+/**
+ * Create an empty vector.
+ */
     public Vector() {
         for (int i = 0; i < 4; i++) {
             this.elements[i] = 0.0;
