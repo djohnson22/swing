@@ -55,39 +55,55 @@ public class MatrixTest {
     @Test
     public void testRotationX() {
         System.out.println("rotationX");
-        double angle = 0.0;
+        double angle = 1;
         Matrix instance = new Matrix();
         instance.rotationX(angle);
-        fail("The test case is a prototype.");
+        assertEquals(.54030230, instance.get(1, 1), 1E-8);
+        assertEquals(-.84147098, instance.get(1, 2), 1E-8);
+        assertEquals(.84147098, instance.get(2, 1), 1E-8);
+        assertEquals(.54030230, instance.get(2, 2), 1E-8);
     } // testRotationX()
 
     @Test
     public void testRotationY() {
         System.out.println("rotationY");
-        double angle = 0.0;
+        double angle = 1;
         Matrix instance = new Matrix();
         instance.rotationY(angle);
-        fail("The test case is a prototype.");
+        assertEquals(.54030230, instance.get(0, 0), 1E-8);
+        assertEquals(.84147098, instance.get(0, 2), 1E-8);
+        assertEquals(-.84147098, instance.get(2, 0), 1E-8);
+        assertEquals(.54030230, instance.get(2, 2), 1E-8);
     } // testRotationY()
 
     @Test
     public void testRotationZ() {
         System.out.println("rotationZ");
-        double angle = 0.0;
+        double angle = 1;
         Matrix instance = new Matrix();
         instance.rotationZ(angle);
-        fail("The test case is a prototype.");
+        assertEquals(.54030230, instance.get(0, 0), 1E-8);
+        assertEquals(-.84147098, instance.get(0, 1), 1E-8);
+        assertEquals(.84147098, instance.get(1, 0), 1E-8);
+        assertEquals(.54030230, instance.get(1, 1), 1E-8);
     } // testRotationZ()
 
     @Test
     public void testScale() {
         System.out.println("scale");
-        double xFactor = 0.0;
-        double yFactor = 0.0;
-        double zFactor = 0.0;
-        Matrix instance = new Matrix();
-        instance.scale(xFactor, yFactor, zFactor);
-        fail("The test case is a prototype.");
+        double xFactor = 1;
+        double yFactor = 1;
+        double zFactor = 1;
+        Matrix instance1 = new Matrix();
+        Matrix instance2 = new Matrix();
+        instance1.scale(xFactor, yFactor, zFactor);
+         for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                double scaleval = instance1.get(i, j);
+                double idenval = instance2.get(i, j);
+                    assertEquals(idenval, scaleval, 1E-8);
+            } // for
+        } // for
     } // testScale()
 
     @Test
