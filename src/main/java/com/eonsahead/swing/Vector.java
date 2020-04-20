@@ -42,14 +42,29 @@ public class Vector {
         this.elements[2] = z;
         this.elements[3] = h;
     } // Vector( double, double, double, double )
-
+/**
+ * Retrieve a value from a vector.
+ * @param index the index of the desired value
+ * @return the value at that index
+ */
     public double get( int index ) {
         return this.elements[index];
     } // get( int )
     
+   /**
+    * Set a value in a vector.
+    * @param index the index to be set
+    * @param value the desired value 
+    */
+    
     public void set( int index, double value ) {
         this.elements[index] = value;
     } // set( int, double )
+    
+   /**
+    * Set the values from one vector to another.
+    * @param v the vector to be copied
+    */ 
     
     public void set( Vector v ) {
         this.elements[0] = v.elements[0];
@@ -58,6 +73,12 @@ public class Vector {
         this.elements[3] = v.elements[3];
     } // set( Vector )
     
+    /**
+     * Add two vectors.
+     * @param v the vector to be added
+     * @return the resultant vector
+     */
+    
     public Vector add( Vector v ) {
         double x = this.get(0) + v.get(0);
         double y = this.get(1) + v.get(1);
@@ -65,12 +86,24 @@ public class Vector {
         return new Vector( x, y, z );
     } // add( Vector )
     
+    /**
+     * Subtract two vectors.
+     * @param v the vector to be subtracted
+     * @return the resultant vector
+     */
     public Vector subtract( Vector v ) {
         double x = this.get(0) - v.get(0);
         double y = this.get(1) - v.get(1);
         double z = this.get(2) - v.get(2);        
         return new Vector( x, y, z );
     } // subtract( Vector )
+    
+    /**
+     * Calculate the dot product of two vectors
+     * @param v the vector to be multiplied
+     * @return the dot product, in 3 values
+     */
+    
     
     public double dot( Vector v ) {
         double xProduct = this.get(0) * v.get(0);
@@ -79,9 +112,19 @@ public class Vector {
         return xProduct + yProduct + zProduct;
     } // dot( Vector )
     
+    /**
+     * Find the magnitude of a vector
+     * @return magnitude
+     */
+    
     public double magnitude() {
         return Math.sqrt( this.dot( this ) );
     } // magnitude()
+    
+    /**
+     * Normalize a vector
+     * @return normalized vector
+     */
     
     public Vector normalize() {
         double length = this.magnitude();
@@ -90,6 +133,12 @@ public class Vector {
         double z = this.get(2) / length;
         return new Vector( x, y, z );
     } // normalize()
+    
+    /**
+     * Calculate the cross product of two vectors.
+     * @param v the vector to be multiplied
+     * @return the product vector
+     */
     
     public Vector cross( Vector v ) {
         double x = this.get(1) * v.get(2) - this.get(2) * v.get(1);
