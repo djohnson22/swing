@@ -17,14 +17,25 @@ public class Vector {
             this.elements[i] = 0.0;
         } // for
     } // Vector()
-
+/**
+ * 
+ * @param x first value of vector
+ * @param y second value of vector
+ * @param z third value of vector
+ */
     public Vector(double x, double y, double z) {
         this.elements[0] = x;
         this.elements[1] = y;
         this.elements[2] = z;
         this.elements[3] = 1.0;
     } // Vector( double, double, double )
-
+/**
+ * 
+ * @param x
+ * @param y
+ * @param z
+ * @param h 
+ */
     public Vector(double x, double y, double z, double h) {
         this.elements[0] = x;
         this.elements[1] = y;
