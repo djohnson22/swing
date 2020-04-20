@@ -129,7 +129,12 @@ public class Matrix {
         } // for
         return product;
     } // multiply( Matrix )
-
+    
+/**
+ * Multiply two vectors.
+ * @param v the second vector
+ * @return product vector
+ */
     public Vector multiply(Vector v) {
         double x = 0.0;
         for (int i = 0; i < 3; i++) {
@@ -148,7 +153,11 @@ public class Matrix {
 
         return new Vector(x, y, z);
     } // multiply( Vector )
-
+/**
+ * Convert matrix row to string.
+ * @param row the row to convert
+ * @return string containing values in matrix row.
+ */
     private String rowToString(int row) {
         StringBuilder result = new StringBuilder();
         result.append("( ");
@@ -160,7 +169,10 @@ public class Matrix {
         result.append(" )");
         return result.toString();
     } // rowToString( int )
-
+/**
+ * Convert an entire matrix to be printed
+ * @return string containing matrix values
+ */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
