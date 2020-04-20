@@ -9,20 +9,35 @@ package com.eonsahead.swing;
 public class Matrix {
 
     private final double[][] elements;
-
+/**
+ * Construct a 4 by 4 matrix.
+ */
     public Matrix() {
         this.elements = new double[4][4];
         this.identity();
     } // Matrix()
-
+/**
+ * Retrieve a value at a position in the matrix.
+ * @param row row in target matrix
+ * @param column column in target matrix
+ * @return the value at that location
+ */
     public double get(int row, int column) {
         return this.elements[row][column];
     } // get( int, int )
-
+/**
+ * Set a value at a position in the matrix.
+ * @param row row in target matrix
+ * @param column column in target matrix
+ * @param value the value to set that location to
+ */
     public void set(int row, int column, double value) {
         this.elements[row][column] = value;
     } // set( int, int, double )
-
+    
+/**
+ * Transform an empty matrix into an identity matrix.
+ */
     public final void identity() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -35,7 +50,10 @@ public class Matrix {
             } // for
         } // for
     } // identity()
-
+/**
+ * Rotate about the x axis.
+ * @param angle the desired rotation angle 
+ */
     public void rotationX(double angle) {
         this.identity();
         this.set(1, 1, Math.cos(angle));
@@ -43,7 +61,10 @@ public class Matrix {
         this.set(2, 1, Math.sin(angle));
         this.set(2, 2, Math.cos(angle));
     } // rotationX( double )
-
+/**
+ * Rotate about the y axis.
+ * @param angle  the desired rotation angle
+ */
     public void rotationY(double angle) {
         this.identity();
         this.set(0, 0, Math.cos(angle));
@@ -51,7 +72,10 @@ public class Matrix {
         this.set(2, 0, -Math.sin(angle));
         this.set(2, 2, Math.cos(angle));
     } // rotationY( double )
-
+/**
+ * Rotate about the z axis.
+ * @param angle the desired rotation angle
+ */
     public void rotationZ(double angle) {
         this.identity();
         this.set(0, 0, Math.cos(angle));
@@ -60,6 +84,12 @@ public class Matrix {
         this.set(1, 1, Math.cos(angle));
     } // rotationZ( double )
 
+   /**
+    * Scale a matrix
+    * @param xFactor value to scale x by
+    * @param yFactor value to scale y by
+    * @param zFactor value to scale z by
+    */
     public void scale(double xFactor, double yFactor, double zFactor) {
         this.identity();
         this.set(0, 0, xFactor);
@@ -67,13 +97,24 @@ public class Matrix {
         this.set(2, 2, zFactor);
     } // scale( double, double, double )
 
+    /**
+     * 
+     * @param deltaX shift in x
+     * @param deltaY shift in y
+     * @param deltaZ shift in z
+     */
     public void translate(double deltaX, double deltaY, double deltaZ) {
         this.identity();
         this.set(0, 3, deltaX);
         this.set(1, 3, deltaY);
         this.set(2, 3, deltaZ);
     } // translate( double, double, double )
-
+    
+/**
+ * Multiply two matricies.
+ * @param otherMatrix the second matrix to be multiplied
+ * @return the product matrix
+ */
     public Matrix multiply(Matrix otherMatrix) {
         Matrix product = new Matrix();
         for (int row = 0; row < 4; row++) {
